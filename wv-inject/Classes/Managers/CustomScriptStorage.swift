@@ -89,8 +89,11 @@ final class CustomScriptStorage {
     private func saveToStorage() {
         let fileName = self.storageFileName()
 
-        let result = self.story.asJson()
-
+        let result = """
+        window._story =
+            \(self.story.asJson())
+        ;
+        """
         Storage.store(result, to: Storage.Directory.documents, as: fileName)
     }
 
