@@ -721,17 +721,23 @@ extension PresentationVC {
 
     func setStoryProp(_ prop: SetPropModel) {
         let newConfig = self.scriptStorage.setPropModel(prop)
-        self.addConfiguration(newConfig.asJson())
+
+        if let debugAppState = newConfig["debugAppState"] as? CustomScriptStorage.StoryScriptType {
+            self.addConfiguration(debugAppState.asJson())
+        }
     }
 
     func deleteStoryProp(_ prop: DeletePropModel) {
         let newConfig = self.scriptStorage.deleteStoryProp(prop)
-        self.addConfiguration(newConfig.asJson())
+
+        if let debugAppState = newConfig["debugAppState"] as? CustomScriptStorage.StoryScriptType {
+            self.addConfiguration(debugAppState.asJson())
+        }
     }
 
     func addConfiguration(_ text: String) {
         let js = """
-        window._story = \(text)
+        window._story.debugAppState = \(text)
         _onStoryChange();
         """
 
@@ -742,6 +748,8 @@ extension PresentationVC {
                 self.getAppState()
             }
         })
+
+        (self.tabBarController as? TabBarController)?.toConfigurator(text)
     }
 
     func getAppState() {

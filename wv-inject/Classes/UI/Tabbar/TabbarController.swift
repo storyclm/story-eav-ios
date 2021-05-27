@@ -50,14 +50,24 @@ final class TabBarController: UITabBarController {
         self.presentationViewController?.addConfiguration(text)
     }
 
-    func toConfigurator(_ config: [String: Any]?) {
+    func toConfigurator(_ jsonText: String?) {
         var text = "{}"
-        if let config = config,
-           let jsonData = try? JSONSerialization.data(withJSONObject: config, options: [.prettyPrinted]),
-           let jsonText = String(data: jsonData, encoding: String.Encoding.utf8)
-        {
+        if let jsonText = jsonText {
             text = jsonText
         }
+
+        if let jsonData = text.data(using: String.Encoding.utf8) {
+            do {
+                let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+                let prettyJsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted])
+                if let jsonText = String(data: prettyJsonData, encoding: String.Encoding.utf8) {
+                    text = jsonText
+                }
+            } catch {
+                print("toConfigurator error: \(error)")
+            }
+        }
+        
         if self.configuratorViewController?.isViewLoaded == false {
             self.configuratorViewController?.loadView()
         }
