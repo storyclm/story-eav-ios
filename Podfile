@@ -5,7 +5,5 @@ target 'wv-inject' do
 
   pod 'StoryContent', :path => './story-content-ios'
   pod 'StoryID'
-#  pod 'StoryContent', :git => 'https://github.com/storyclm/story-content-ios.git', :branch => 'beta'
-  pod 'Runtime'
   pod "STRegex"
 end

@@ -59,6 +59,8 @@ class PresentationVC: UIViewController,
     private var presentationTimer: Timer?
     private var isControlsHidden = false
 
+    private var scriptStorage: CustomScriptStorage!
+
     deinit {
         print("PresentationVC deinit")
     }
@@ -126,17 +128,31 @@ class PresentationVC: UIViewController,
     }
 
     private func addUserScripts() {
+
+        let userContentController = self.webView.configuration.userContentController
+
+        // Logger
         let loggerScript = "function captureLog(msg) { window.webkit.messageHandlers.logHandler.postMessage(msg); } window.console.log = captureLog;"
         let userScript = WKUserScript(source: loggerScript, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-        self.webView.configuration.userContentController.addUserScript(userScript)
+        userContentController.addUserScript(userScript)
 
+        // Handler
         for handler in PresentationVC.MessageHandler.allCases {
-            self.webView.configuration.userContentController.add(self, name: handler.rawValue)
+            userContentController.add(self, name: handler.rawValue)
         }
 
+        // Custom script
         if let loadedScript = ScriptManager.instance.currentScript?.script {
             let script = WKUserScript(source: loadedScript, injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
-            self.webView.configuration.userContentController.addUserScript(script)
+            userContentController.addUserScript(script)
+        }
+
+        // StoryTemplate
+        let storyTemplate = self.scriptStorage.initialScript()
+        self.webView.evaluateJavaScript(storyTemplate) { frame, error in
+            if let error = error {
+                print("Error: \(error)")
+            }
         }
     }
 
@@ -617,6 +633,7 @@ class PresentationVC: UIViewController,
 extension PresentationVC {
     func inject(presentation: Presentation) {
         self.currentPresentation = presentation
+        self.scriptStorage = CustomScriptStorage(with: presentation)
     }
 }
 
@@ -664,6 +681,10 @@ extension UIView {
 
 extension PresentationVC: WKScriptMessageHandler {
 
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.getAppState()
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 
         switch message.name {
@@ -671,11 +692,62 @@ extension PresentationVC: WKScriptMessageHandler {
             (self.tabBarController as? TabBarController)?.addLog(String(describing: message.body))
             print("LOG: \(message.body)")
         case PresentationVC.MessageHandler.setStoryProp.rawValue:
-            print("setStoryProp: \(message.body)")
+            guard let data = (message.body as? String)?.data(using: String.Encoding.utf8) else {
+                print("[PresentationVC: WKScriptMessageHandler ] can't parse setStoryProp data")
+                return
+            }
+            guard let propModel = try? JSONDecoder().decode(SetPropModel.self, from: data) else {
+                print("[PresentationVC: WKScriptMessageHandler ] can't decode setStoryProp model")
+                return
+            }
+            self.setStoryProp(propModel)
         case PresentationVC.MessageHandler.deleteStoryProp.rawValue:
-            print("deleteStoryProp: \(message.body)")
+            guard let data = (message.body as? String)?.data(using: String.Encoding.utf8) else {
+                print("[PresentationVC: WKScriptMessageHandler ] can't parse deleteStoryProp data")
+                return
+            }
+            guard let propModel = try? JSONDecoder().decode(DeletePropModel.self, from: data) else {
+                print("[PresentationVC: WKScriptMessageHandler ] can't decode deleteStoryProp model")
+                return
+            }
+            self.deleteStoryProp(propModel)
         default:
             break
         }
+    }
+}
+
+extension PresentationVC {
+
+    func setStoryProp(_ prop: SetPropModel) {
+        let newConfig = self.scriptStorage.setPropModel(prop)
+        self.addConfiguration(newConfig.asJson())
+    }
+
+    func deleteStoryProp(_ prop: DeletePropModel) {
+        let newConfig = self.scriptStorage.deleteStoryProp(prop)
+        self.addConfiguration(newConfig.asJson())
+    }
+
+    func addConfiguration(_ text: String) {
+        let js = """
+        window._story = \(text)
+        _onStoryChange();
+        """
+
+        self.webView.evaluateJavaScript(js, completionHandler: { frame, error in
+            if let error = error {
+                print("Error: \(error)")
+            } else {
+                self.getAppState()
+            }
+        })
+    }
+
+    func getAppState() {
+        self.webView.evaluateJavaScript("window._story", completionHandler: { frame, error in
+            let storyModel = frame as? [String: Any]
+            self.scriptStorage.setStoryModel(storyModel)
+        })
     }
 }

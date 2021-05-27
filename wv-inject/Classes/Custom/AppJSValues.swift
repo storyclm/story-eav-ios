@@ -6,50 +6,52 @@
 //
 
 import Foundation
-import Runtime
 
 protocol PropertyReflectable {
-    var classTypeInfo: TypeInfo? { get }
     func propertyNames() -> [String]
 }
 
 extension PropertyReflectable {
-    var classTypeInfo: TypeInfo? {
-        let iClass = type(of: self).self
-        return try? typeInfo(of: iClass)
-    }
-
     func propertyNames() -> [String] {
         return Mirror(reflecting: self).children.compactMap { $0.label }
     }
 
     func jsPropertyValue(for key: String) -> Any? {
-        let info = self.classTypeInfo
-        let property = try? info?.property(named: key)
+        let mirror = Mirror(reflecting: self)
+        let children = mirror.children
+        let property = children.filter({ $0.label == key }).first
+        guard let value = property?.value else {
+            return nil
+        }
 
-        let value = try? property?.get(from: self)
-        if property?.type == String.self {
-            return "\'\(value ?? "")\'"
-        } else {
-            return value
+        switch value {
+        case Optional<Any>.some(let ivalue):
+            if type(of: ivalue) == String.self {
+                return "\"\(ivalue)\""
+            } else {
+                return ivalue
+            }
+        default:
+            return nil
         }
     }
 }
 
 @objc class BaseJSReflectableModel: NSObject, PropertyReflectable {
-    var className: String {
+    var jsClassName: String {
         return String(describing: type(of: self).self)
     }
 
     func asJavaScript() -> String {
         var propertyResult: [String] = []
         for propertyName in self.propertyNames() {
-            let propertyClass = "\(propertyName): \(self.jsPropertyValue(for: propertyName) ?? "")"
+            let propertyValue = self.jsPropertyValue(for: propertyName) ?? "null"
+            let propertyClass = "\"\(propertyName)\": \(propertyValue)"
             propertyResult.append(propertyClass)
         }
 
         let result = """
-        \(self.className): {
+        \"\(self.jsClassName)\": {
             \(propertyResult.joined(separator: ",\n"))
         }
         """

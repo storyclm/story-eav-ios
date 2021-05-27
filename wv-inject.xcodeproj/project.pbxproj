@@ -20,6 +20,13 @@
 		1B9902B2263704FD0057E3BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B9902B1263704FD0057E3BA /* Assets.xcassets */; };
 		1B9902B5263704FD0057E3BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B9902B3263704FD0057E3BA /* LaunchScreen.storyboard */; };
 		1B9902BD263706270057E3BA /* AppJSValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9902BC263706270057E3BA /* AppJSValues.swift */; };
+		1BCB0A02265E6AB9009BB973 /* AppInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A01265E6AB9009BB973 /* AppInfoModel.swift */; };
+		1BCB0A05265E6BBA009BB973 /* PresentationInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A04265E6BBA009BB973 /* PresentationInfoModel.swift */; };
+		1BCB0A07265E6BC2009BB973 /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A06265E6BC2009BB973 /* UserInfoModel.swift */; };
+		1BCB0A0A265E8904009BB973 /* SetPropModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A09265E8904009BB973 /* SetPropModel.swift */; };
+		1BCB0A0C265ECA99009BB973 /* CustomScriptStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A0B265ECA99009BB973 /* CustomScriptStorage.swift */; };
+		1BCB0A0F265F6266009BB973 /* Dictionary+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A0E265F6266009BB973 /* Dictionary+KeyPath.swift */; };
+		1BCB0A11265F6712009BB973 /* DeletePropModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB0A10265F6712009BB973 /* DeletePropModel.swift */; };
 		1BD0141726525CC5008263BE /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD0141626525CC5008263BE /* TabbarController.swift */; };
 		1BD0141A26526072008263BE /* ConsoleLogTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD0141926526072008263BE /* ConsoleLogTableController.swift */; };
 		1BD0141E2652878C008263BE /* ConfiguratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD0141D2652878B008263BE /* ConfiguratorViewController.swift */; };
@@ -43,6 +50,13 @@
 		1B9902B4263704FD0057E3BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B9902B6263704FD0057E3BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B9902BC263706270057E3BA /* AppJSValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppJSValues.swift; sourceTree = "<group>"; };
+		1BCB0A01265E6AB9009BB973 /* AppInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoModel.swift; sourceTree = "<group>"; };
+		1BCB0A04265E6BBA009BB973 /* PresentationInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationInfoModel.swift; sourceTree = "<group>"; };
+		1BCB0A06265E6BC2009BB973 /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
+		1BCB0A09265E8904009BB973 /* SetPropModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPropModel.swift; sourceTree = "<group>"; };
+		1BCB0A0B265ECA99009BB973 /* CustomScriptStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScriptStorage.swift; sourceTree = "<group>"; };
+		1BCB0A0E265F6266009BB973 /* Dictionary+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+KeyPath.swift"; sourceTree = "<group>"; };
+		1BCB0A10265F6712009BB973 /* DeletePropModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePropModel.swift; sourceTree = "<group>"; };
 		1BD0141626525CC5008263BE /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		1BD0141926526072008263BE /* ConsoleLogTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogTableController.swift; sourceTree = "<group>"; };
 		1BD0141D2652878B008263BE /* ConfiguratorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfiguratorViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +80,7 @@
 		1B2CAB88264BF46600FDABEC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1BCB0A0D265F6256009BB973 /* Extensions */,
 				1BD0141B265276B0008263BE /* Custom */,
 				1B2CAB8A264BF47300FDABEC /* Managers */,
 				1B2CAB89264BF46E00FDABEC /* UI */,
@@ -88,11 +103,12 @@
 		1B2CAB8A264BF47300FDABEC /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				1B693B08265BF03900183EF3 /* AppPropertiesManager.swift */,
+				1BCB0A0B265ECA99009BB973 /* CustomScriptStorage.swift */,
 				1B2CAB95264E6C6A00FDABEC /* PresentationManager.swift */,
 				1B2CAB99264E9F1600FDABEC /* ReachManager.swift */,
 				1B2CAB97264E6C7C00FDABEC /* ScriptManager.swift */,
 				1B2CAB9D264EA24900FDABEC /* Storage.swift */,
-				1B693B08265BF03900183EF3 /* AppPropertiesManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -145,6 +161,33 @@
 			path = "wv-inject";
 			sourceTree = "<group>";
 		};
+		1BCB0A03265E6BA9009BB973 /* Info Models */ = {
+			isa = PBXGroup;
+			children = (
+				1BCB0A01265E6AB9009BB973 /* AppInfoModel.swift */,
+				1BCB0A04265E6BBA009BB973 /* PresentationInfoModel.swift */,
+				1BCB0A06265E6BC2009BB973 /* UserInfoModel.swift */,
+			);
+			path = "Info Models";
+			sourceTree = "<group>";
+		};
+		1BCB0A08265E88F6009BB973 /* Prop Models */ = {
+			isa = PBXGroup;
+			children = (
+				1BCB0A09265E8904009BB973 /* SetPropModel.swift */,
+				1BCB0A10265F6712009BB973 /* DeletePropModel.swift */,
+			);
+			path = "Prop Models";
+			sourceTree = "<group>";
+		};
+		1BCB0A0D265F6256009BB973 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1BCB0A0E265F6266009BB973 /* Dictionary+KeyPath.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		1BD0141526525CB1008263BE /* Tabbar */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +207,8 @@
 		1BD0141B265276B0008263BE /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				1BCB0A08265E88F6009BB973 /* Prop Models */,
+				1BCB0A03265E6BA9009BB973 /* Info Models */,
 				1B9902BC263706270057E3BA /* AppJSValues.swift */,
 			);
 			path = Custom;
@@ -314,10 +359,17 @@
 				1B2CAB98264E6C7C00FDABEC /* ScriptManager.swift in Sources */,
 				1B693B09265BF03900183EF3 /* AppPropertiesManager.swift in Sources */,
 				1B2CAB96264E6C6A00FDABEC /* PresentationManager.swift in Sources */,
+				1BCB0A0F265F6266009BB973 /* Dictionary+KeyPath.swift in Sources */,
 				1BD0141A26526072008263BE /* ConsoleLogTableController.swift in Sources */,
+				1BCB0A0C265ECA99009BB973 /* CustomScriptStorage.swift in Sources */,
+				1BCB0A05265E6BBA009BB973 /* PresentationInfoModel.swift in Sources */,
+				1BCB0A02265E6AB9009BB973 /* AppInfoModel.swift in Sources */,
 				1B2CAB9A264E9F1700FDABEC /* ReachManager.swift in Sources */,
 				1B9902BD263706270057E3BA /* AppJSValues.swift in Sources */,
+				1BCB0A07265E6BC2009BB973 /* UserInfoModel.swift in Sources */,
+				1BCB0A11265F6712009BB973 /* DeletePropModel.swift in Sources */,
 				1BD0141726525CC5008263BE /* TabbarController.swift in Sources */,
+				1BCB0A0A265E8904009BB973 /* SetPropModel.swift in Sources */,
 				1B2CAB9E264EA24900FDABEC /* Storage.swift in Sources */,
 				1B9902A9263704F90057E3BA /* AppDelegate.swift in Sources */,
 				1BD0141E2652878C008263BE /* ConfiguratorViewController.swift in Sources */,

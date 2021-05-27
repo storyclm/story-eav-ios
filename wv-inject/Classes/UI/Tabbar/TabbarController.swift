@@ -25,11 +25,19 @@ final class TabBarController: UITabBarController {
     // MARK: - ViewControllers
 
     private var presentationViewController: PresentationVC? {
-        return self.viewControllers?.filter({ $0 is PresentationVC }).first as? PresentationVC
+        return self.getViewController()
+    }
+
+    private var configuratorViewController: ConfiguratorViewController? {
+        return self.getViewController()
     }
 
     private var logViewController: ConsoleLogTableController? {
-        return self.viewControllers?.filter({ $0 is ConsoleLogTableController }).first as? ConsoleLogTableController
+        return self.getViewController()
+    }
+
+    private func getViewController<T>() -> T? {
+        return self.viewControllers?.filter({ $0 is T }).first as? T
     }
 
     // MARK: - Logs
@@ -39,17 +47,21 @@ final class TabBarController: UITabBarController {
     }
 
     func addStoryConfigurator(_ text: String) {
-        let js = """
-        window._story = \(text)
-        _onStoryChange();
-        """
+        self.presentationViewController?.addConfiguration(text)
+    }
 
-        self.presentationViewController?.webView.evaluateJavaScript(js, completionHandler: { frame, error in
-            if let error = error {
-                print("Error: \(error)")
-            } else {
-                print("Frame: \(String(describing: frame))")
-            }
-        })
+    func toConfigurator(_ config: [String: Any]?) {
+        var text = "{}"
+        if let config = config,
+           let jsonData = try? JSONSerialization.data(withJSONObject: config, options: [.prettyPrinted]),
+           let jsonText = String(data: jsonData, encoding: String.Encoding.utf8)
+        {
+            text = jsonText
+        }
+        if self.configuratorViewController?.isViewLoaded == false {
+            self.configuratorViewController?.loadView()
+        }
+        self.configuratorViewController?.textField.text = text
+        self.configuratorViewController?.view.setNeedsLayout()
     }
 }
